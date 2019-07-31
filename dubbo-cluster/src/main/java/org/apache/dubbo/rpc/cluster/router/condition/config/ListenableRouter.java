@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 public abstract class ListenableRouter extends AbstractRouter implements ConfigurationListener {
     public static final String NAME = "LISTENABLE_ROUTER";
     private static final String RULE_SUFFIX = ".condition-router";
-    public static final int DEFAULT_PRIORITY = 200;
+
     private static final Logger logger = LoggerFactory.getLogger(ListenableRouter.class);
     private ConditionRouterRule routerRule;
     private List<ConditionRouter> conditionRouters = Collections.emptyList();
@@ -119,8 +119,8 @@ public abstract class ListenableRouter extends AbstractRouter implements Configu
         }
         String routerKey = ruleKey + RULE_SUFFIX;
         configuration.addListener(routerKey, this);
-        String rule = configuration.getConfig(routerKey);
-        if (rule != null) {
+        String rule = configuration.getRule(routerKey, DynamicConfiguration.DEFAULT_GROUP);
+        if (StringUtils.isNotEmpty(rule)) {
             this.process(new ConfigChangeEvent(routerKey, rule));
         }
     }
